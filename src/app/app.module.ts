@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { MoistureComponent } from './moisture/moisture.component';
 import { TemperatureComponent } from './temperature/temperature.component';
 import { HumidityComponent } from './humidity/humidity.component';
+import { AppRoutingModule } from './app-routing.module';
 
 
 
@@ -22,7 +23,8 @@ import { HumidityComponent } from './humidity/humidity.component';
     BrowserModule, 
     FormsModule,
     NgxChartsModule,
-    BrowserAnimationsModule 
+    BrowserAnimationsModule,
+    AppRoutingModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

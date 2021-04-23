@@ -25,7 +25,13 @@ export class HumidityComponent implements OnInit {
   xAxisLabel: string = 'Year';
   yAxisLabel: string = 'Population';
   timeline: boolean = true;
-
+  showRefLines: boolean = true;
+  showRefLabels: boolean = true;
+  referenceLines = [
+    { value: 15, name: 'Max' },
+    { value: -13, name: 'Min' },
+    { value: 2, name: 'Ideal' }
+  ];
 
   curve = shape.curveBundle.beta(0.5);
   gradient = false;
