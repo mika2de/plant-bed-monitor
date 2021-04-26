@@ -1,1 +1,41 @@
 <p>moisture works!</p>
+<ngx-charts-line-chart
+  [view]="view"
+  [scheme]="colorScheme"
+  [legend]="legend"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxis]="xAxis"
+  [yAxis]="yAxis"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
+  [timeline]="timeline"
+  [results]="moisturesLeft"
+  (select)="onSelect($event)"
+  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)"
+  [referenceLines]="referenceLines"
+  [showRefLines]="showRefLines"  
+  [showRefLabels]="showRefLabels"[timeline]="true"
+  >
+</ngx-charts-line-chart>
+<ngx-charts-line-chart
+  [view]="view"
+  [scheme]="colorScheme"
+  [legend]="legend"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxis]="xAxis"
+  [yAxis]="yAxis"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
+  [timeline]="timeline"
+  [results]="moisturesRight"
+  (select)="onSelect($event)"
+  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)"
+  [referenceLines]="referenceLines"
+  [showRefLines]="showRefLines"  
+  [showRefLabels]="showRefLabels"[timeline]="true"
+  >
+</ngx-charts-line-chart>

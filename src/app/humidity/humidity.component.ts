@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import * as shape from 'd3-shape';
 
-import { Humidities } from "./humidities"
-import { HumidityService } from '../humidity.service';
+import { Multi } from "../multi"
+import { MoistureService } from '../moisture.service';
 
 @Component({
   selector: 'app-humidity',
@@ -11,7 +10,8 @@ import { HumidityService } from '../humidity.service';
 })
 export class HumidityComponent implements OnInit {
 
-  humidities: Humidities[] = [];
+  humiditiesRight: Multi[] = [];
+  humiditiesLeft: Multi[] = [];
   view: any[] = [700, 300];
 
   // options
@@ -33,39 +33,24 @@ export class HumidityComponent implements OnInit {
     { value: 2, name: 'Ideal' }
   ];
 
-  curve = shape.curveBundle.beta(0.5);
-  gradient = false;
-  showXAxis = true;
-  showYAxis = true;
-  showLegend = true;
-  single = [
-    {
-      "name": "Germany",
-      "value": 20
-    },
-    {
-      "name": "USA",
-      "value": -5
-    },
-    {
-      "name": "France",
-      "value": 12
-    }
-  ];
-
   colorScheme = {
     domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
   };
 
 
-  constructor(private humidityService: HumidityService) {}
+  constructor(private humidityService: MoistureService) {}
 
   ngOnInit(): void {
-    this.getHumidities();
+    this.getHumiditiesLeft();
+    this.getHumiditiesRight();
   }
 
-  getHumidities(): void {
-    this.humidityService.getHumidities().subscribe(entries => this.humidities = entries) 
+  getHumiditiesLeft(): void {
+    this.humidityService.getMoisturesLeft().subscribe(entries => this.humiditiesLeft = entries) 
+  }
+
+  getHumiditiesRight(): void {
+    this.humidityService.getMoisturesRight().subscribe(entries => this.humiditiesRight = entries) 
   }
 
   onSelect(data): void {

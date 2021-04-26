@@ -9,6 +9,7 @@ import { MoistureComponent } from './moisture/moisture.component';
 import { TemperatureComponent } from './temperature/temperature.component';
 import { HumidityComponent } from './humidity/humidity.component';
 import { AppRoutingModule } from './app-routing.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 
@@ -17,7 +18,8 @@ import { AppRoutingModule } from './app-routing.module';
     AppComponent,
     MoistureComponent,
     TemperatureComponent,
-    HumidityComponent
+    HumidityComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule, 
