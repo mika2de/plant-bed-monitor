@@ -1,0 +1,103 @@
+<div class="container" style="padding-top:20px">
+  <div class="row">
+    <h1 class="display-6" style="color: white;"><strong> Smart Garden Monitor <i class="bi bi-cloud-sun"></i></strong>
+    </h1>
+  </div>
+</div>
+<div style="background-color: rgba(255, 255, 255, 0.7);">
+  <div class="container" style="padding-top:20px">
+    <div class="row">
+      <div class="col-sm-2 p-3 border bg-light">
+        <h4>Temperatur</h4>
+        <blockquote class="blockquote">
+          <p>
+            <i class="bi bi-thermometer-half"></i>14° Nord-Ost
+            <br />
+            <i class="bi bi-thermometer-half"></i>16° Süd-West
+          </p>
+
+        </blockquote>
+        <p><button type="button" class="btn btn-outline-success btn-sm">Historie</button>&nbsp;
+          <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+            data-bs-target="#exampleModal">Prognose</button>
+        </p>
+        <br />
+        <h4>Luftfeuchtigkeit</h4>
+        <blockquote class="blockquote">
+          <p><i class="bi bi-droplet"></i>30% Nord-Ost
+            <br />
+            <i class="bi bi-droplet"></i>50% Süd-West
+          </p>
+        </blockquote>
+        <p><button type="button" class="btn btn-outline-success btn-sm">Historie</button>&nbsp;
+          <button type="button" class="btn btn-outline-success btn-sm">Prognose</button>
+        </p>
+
+      </div>
+
+      <!-- <div class="row" style="background-color: white;"> -->
+      <div class="col-sm-10  p-3" style="overflow: auto; height: 100%">
+        <h4>Bodenfeuchtigkeit</h4>
+        <!-- </div>
+    <div class="col-sm-12"> -->
+        <div [style.height.px]="300">
+          <ngx-charts-bar-vertical [scheme]="colorScheme" [results]="moistures" [gradient]="gradient"
+            [xAxis]="showXAxis" [yAxis]="showYAxis" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="xAxisLabel" yAxisLabel="Prozent" [yScaleMin]="20" (select)="onSelect($event)">
+          </ngx-charts-bar-vertical>
+        </div>
+        <!-- </div>  -->
+        <!-- <div class="col-sm-12" style="text-align:right"> -->
+
+        <!-- </div> -->
+      </div>
+      <div class="text-end"><small><i>Idealbedingungen bei 30%</i></small></div>
+    </div>
+
+    <!-- <div class="row">
+
+  </div>
+  <div class="row">
+    <div class="col-sm-6" style="height: 300px; background-color: aliceblue;">
+      <ngx-charts-area-chart [scheme]="colorScheme" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
+        yAxisLabel="Luftfeuchtigkeit" [timeline]="timeline" [results]="temperatures" [gradient]="false"
+        [curve]="temperatureCurve" (select)="onSelect($event)">
+      </ngx-charts-area-chart>
+    </div>
+    <div class="col-sm-6" style="height: 300px; background-color: aliceblue;">
+      <ngx-charts-area-chart [scheme]="colorScheme" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel" [timeline]="timeline" [results]="temperatures" [gradient]="false"
+        [curve]="temperatureCurve" (select)="onSelect($event)">
+      </ngx-charts-area-chart>
+    </div>
+
+
+  </div> -->
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-house"></i> Finkenweg </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <iframe
+          src="https://www.meteoblue.com/de/wetter/widget/three/ro%c3%9fdorf_deutschland_2844756?geoloc=fixed&nocurrent=0&nocurrent=1&noforecast=0&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=bright"
+          frameborder="0" scrolling="NO" allowtransparency="true"
+          sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
+          style="width: 460px; height: 487px"></iframe>
+        <div>
+          <!-- DO NOT REMOVE THIS LINK -->Unterstützt von <a
+            href="https://www.meteoblue.com/de/wetter/woche/ro%c3%9fdorf_deutschland_2844756?utm_source=weather_widget&utm_medium=linkus&utm_content=three&utm_campaign=Weather%2BWidget"
+            target="_blank">meteoblue</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -46,4 +46,5 @@ testem.log
 Thumbs.db
 
 # private files
-garden.jpg
+*.jpg
+*.png
