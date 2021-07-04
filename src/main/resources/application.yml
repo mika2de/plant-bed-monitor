@@ -1,0 +1,12 @@
+quarkus:
+  datasource:
+    db-kind: postgresql
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/sensor_data
+    username: postgres
+    password: password
+  hibernate-orm:
+    log:
+      sql: true
+    database:
+      default-schema: public
