@@ -11,8 +11,13 @@ import java.util.List;
 @ApplicationScoped
 public class RawDataRepository implements PanacheRepository<RawData> {
 
-    public List<RawData> getForLastNMinutes(int minutes) {
+    @Override
+    public void persist(RawData rawData) {
+        this.persist(rawData);
+    }
+
+    public List<RawData> getEntriesSince(LocalDateTime timestamp) {
         return this.find("select cm from RawData cm where created > :timestamp",
-                Parameters.with("timestamp", LocalDateTime.now().minusMinutes(minutes))).list();
+                Parameters.with("timestamp", timestamp)).list();
     }
 }

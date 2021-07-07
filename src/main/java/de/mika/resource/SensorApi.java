@@ -5,6 +5,7 @@ import de.mika.database.RawDataRepository;
 import de.mika.database.SensorRepository;
 import de.mika.database.model.*;
 import de.mika.resource.model.SensorData;
+import de.mika.service.StoreDataService;
 import io.quarkus.panache.common.Parameters;
 
 import javax.inject.Inject;
@@ -20,10 +21,13 @@ public class SensorApi {
     RawDataRepository rawDataRepository;
 
     @Inject
-    CurrentMoistureRepository currentMoistureRepository;
+    StoreDataService storeDataService;
 
     @Inject
     SensorRepository sensorRepository;
+
+    @Inject
+    CurrentMoistureRepository currentMoistureRepository;
 
     @GET
     @Path("/sensors")
@@ -45,30 +49,17 @@ public class SensorApi {
     public List<RawData> getRawDataForLastNMinutes(@QueryParam("minutes")  int minutes){
         if (minutes==0)
             return rawDataRepository.listAll();
-        return rawDataRepository.getForLastNMinutes(minutes);
+        return rawDataRepository.getEntriesSince(LocalDateTime.now().minusMinutes(minutes));
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public RawData saveData(SensorData sensorData){
-        LocalDateTime now = LocalDateTime.now();
-        Sensor sensor = sensorRepository
-                .find("mac = :mac", Parameters.with("mac", sensorData.getMac()))
-                .firstResult();
-        RawData rawData = new RawData();
-        rawData.setSensor(sensor);
-        rawData.setCreated(now);
-        rawData.setMoisture(sensorData.getMoisture());
-        rawDataRepository.persist(rawData);
+    public CurrentMoisture storeData(SensorData sensorData){
+        return storeDataService.storeData(sensorData.getMac(), sensorData.getMoisture());
+    }
 
-        CurrentMoisture currentMoisture = currentMoistureRepository
-                .find("sensor", sensor)
-                .firstResult();
-        currentMoisture.setMoisture(sensorData.getMoisture());
-        currentMoisture.setUpdated(now);
-        currentMoistureRepository.persist(currentMoisture);
+    void updateAvgHour(int moisture, Sensor sensor){
 
-        return rawData;
     }
 }
