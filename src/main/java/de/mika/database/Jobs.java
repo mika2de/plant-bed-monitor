@@ -16,7 +16,7 @@ public class Jobs {
     RawDataRepository rawDataRepository;
 
     @Inject
-    AvgHourRepository avgHourRepository;
+    HourlyMoistureAvgRepository hourlyMoistureAvgRepository;
 
     @Scheduled(every="3660s")
     void avgDay() {

@@ -1,6 +1,7 @@
 package de.mika.database;
 
 import de.mika.database.model.RawData;
+import de.mika.database.model.Sensor;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 
@@ -11,13 +12,15 @@ import java.util.List;
 @ApplicationScoped
 public class RawDataRepository implements PanacheRepository<RawData> {
 
-    @Override
-    public void persist(RawData rawData) {
-        this.persist(rawData);
+    public List<RawData> getEntriesSince(LocalDateTime timestamp) {
+        return this.find("created > :timestamp",
+                Parameters.with("timestamp", timestamp))
+                .list();
     }
 
-    public List<RawData> getEntriesSince(LocalDateTime timestamp) {
-        return this.find("select cm from RawData cm where created > :timestamp",
-                Parameters.with("timestamp", timestamp)).list();
+    public List<RawData> getEntriesOfSensorSince(long sensorId, LocalDateTime timestamp) {
+        return this.find("sensor.id = :sensorId and created > :timestamp",
+                Parameters.with("sensorId", sensorId).and("timestamp", timestamp))
+                .list();
     }
 }

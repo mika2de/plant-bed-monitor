@@ -16,7 +16,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-class RawDataRepositoryTest {
+class RawDataRepositoryITTest {
 
     @Inject
     SensorRepository sensorRepository;
@@ -46,9 +46,15 @@ class RawDataRepositoryTest {
     }
 
     @Test
-    void testGetEntriesSinceLastYear() {
+    void testGetEntriesSince() {
         List<RawData> rawDataList = rawDataRepository.getEntriesSince(LocalDateTime.now().minusYears(1));
         Assertions.assertEquals(10*datapointsPerSensor, rawDataList.size());
+    }
+
+    @Test
+    void testGetEntriesOfSensorSince() {
+        List<RawData> rawDataList = rawDataRepository.getEntriesOfSensorSince(1L, LocalDateTime.now().minusYears(1));
+        Assertions.assertEquals(datapointsPerSensor, rawDataList.size());
     }
 
     @Test
