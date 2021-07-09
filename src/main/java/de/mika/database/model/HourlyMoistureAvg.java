@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class HourlyMoistureAvg {
     @Id
     private Sensor sensor;
     @Id
-    private Date date;
-    private int hour;
-    private int moisture;
+    private LocalDateTime created;
+    @Column(name="avg_moisture")
+    private int avgMoisture;
 }

@@ -17,8 +17,7 @@ CREATE TABLE "current" (
 );
 
 CREATE TABLE "avg_hour" (
-  "date" date,
-  "hour" int,
+  "created" timestamp,
   "avg_moisture" int,
   "mac_id" int
 );

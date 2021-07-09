@@ -1,8 +1,6 @@
 package de.mika.database;
 
 import de.mika.database.model.RawData;
-import de.mika.database.model.Sensor;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.*;
 
@@ -12,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 class RawDataRepositoryITTest {
@@ -53,7 +49,7 @@ class RawDataRepositoryITTest {
 
     @Test
     void testGetEntriesOfSensorSince() {
-        List<RawData> rawDataList = rawDataRepository.getEntriesOfSensorSince(1L
+        List<RawData> rawDataList = rawDataRepository.getEntriesOfSensorAfter(1L
                 , LocalDateTime.now().minusYears(1));
         Assertions.assertEquals(datapointsPerSensor, rawDataList.size());
     }

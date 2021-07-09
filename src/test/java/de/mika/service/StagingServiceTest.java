@@ -9,9 +9,7 @@ import de.mika.database.model.Sensor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
@@ -50,7 +48,7 @@ class StagingServiceTest {
 
         List<RawData> mockedRawDataList = new ArrayList<>();
         List<RawData> mockedRawDataToBeStaged = new ArrayList<>();
-        System.out.println("++++++++++++++++++++++");
+
         for (int r = 0; r < 10; r++) {
             RawData rawData = new RawData(mockedSensor, mockedNow.minusHours(1).plusMinutes(r * 10), r);
             mockedRawDataList.add(rawData);
@@ -61,15 +59,14 @@ class StagingServiceTest {
         }
         mockedHourlyMoistureAvgList.add(new HourlyMoistureAvg(
                 mockedSensor,
-                Date.valueOf(mockedNow.toLocalDate()),
-                mockedNow.minusHours(1).getHour(),
+                mockedNow.minusHours(1),
                 mockedRawDataToBeStaged
                         .stream()
                         .mapToInt(RawData::getMoisture).sum() / mockedRawDataToBeStaged.size())
         );
 
         when(sensorRepositoryMock.listAll()).thenReturn(mockedSensorList);
-        when(rawDataRepositoryMock.getEntriesOfSensorSince(anyLong(), any(LocalDateTime.class))).thenReturn(mockedRawDataList);
+        when(rawDataRepositoryMock.getEntriesOfSensorBefore(anyLong(), any(LocalDateTime.class))).thenReturn(mockedRawDataList);
 
         StagingService stagingService = new StagingService(localDateTimeServiceMock,
                 sensorRepositoryMock,

@@ -17,7 +17,13 @@ public class RawDataRepository implements PanacheRepository<RawData> {
                 .list();
     }
 
-    public List<RawData> getEntriesOfSensorSince(long sensorId, LocalDateTime timestamp) {
+    public List<RawData> getEntriesOfSensorBefore(long sensorId, LocalDateTime timestamp) {
+        return this.find("sensor.id = :sensorId and created < :timestamp",
+                Parameters.with("sensorId", sensorId).and("timestamp", timestamp))
+                .list();
+    }
+
+    public List<RawData> getEntriesOfSensorAfter(long sensorId, LocalDateTime timestamp) {
         return this.find("sensor.id = :sensorId and created > :timestamp",
                 Parameters.with("sensorId", sensorId).and("timestamp", timestamp))
                 .list();

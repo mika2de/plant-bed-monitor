@@ -12,7 +12,12 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -42,23 +47,23 @@ public class StagingService {
         int hour = now.minusHours(1).getHour();
         sensorRepository.listAll()
                 .forEach(sensor -> {
-                    List<RawData> pastHourEntries = rawDataRepository.getEntriesOfSensorSince(sensor.getId(), now.minusMinutes(120))
+                    List<RawData> unprocessedEntries = rawDataRepository.getEntriesOfSensorBefore(sensor.getId(), now.minusHours(1));
+                    Map<LocalDateTime, List<RawData>> rawDataPerYearMonthDayHourInterval = unprocessedEntries
                             .stream()
-                            .filter(rawData -> rawData.getCreated().getHour() == hour)
-                            .collect(Collectors.toList());
+                            .collect(Collectors.groupingBy(
+                                    rawData -> rawData.getCreated().truncatedTo(ChronoUnit.HOURS),
+                                    Collectors.toCollection(ArrayList::new)
+                                    ));
+                    for (Map.Entry<LocalDateTime, List<RawData>> entry : rawDataPerYearMonthDayHourInterval.entrySet()) {
+                        int avgMoisture = entry.getValue().stream().mapToInt(RawData::getMoisture).sum() / entry.getValue().size();
+                        HourlyMoistureAvg hourlyMoistureAvg = new HourlyMoistureAvg(
+                                sensor,
+                                entry.getKey(),
+                                avgMoisture);
 
-                    int avgMoisture = pastHourEntries
-                            .stream()
-                            .mapToInt(RawData::getMoisture).sum() / pastHourEntries.size();
-
-                    HourlyMoistureAvg hourlyMoistureAvg = new HourlyMoistureAvg(
-                            sensor,
-                            Date.valueOf(now.toLocalDate()),
-                            hour,
-                            avgMoisture);
-
-                    hourlyMoistureAvgRepository.persist(hourlyMoistureAvg);
-                    pastHourEntries.forEach(rawData -> rawDataRepository.delete(rawData));
+                        hourlyMoistureAvgRepository.persist(hourlyMoistureAvg);
+                        entry.getValue().forEach(rawData -> rawDataRepository.delete(rawData));
+                    }
                 });
     }
 }
