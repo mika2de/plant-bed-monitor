@@ -53,7 +53,8 @@ class RawDataRepositoryITTest {
 
     @Test
     void testGetEntriesOfSensorSince() {
-        List<RawData> rawDataList = rawDataRepository.getEntriesOfSensorSince(1L, LocalDateTime.now().minusYears(1));
+        List<RawData> rawDataList = rawDataRepository.getEntriesOfSensorSince(1L
+                , LocalDateTime.now().minusYears(1));
         Assertions.assertEquals(datapointsPerSensor, rawDataList.size());
     }
 

@@ -5,6 +5,7 @@ import de.mika.database.RawDataRepository;
 import de.mika.database.SensorRepository;
 import de.mika.database.model.*;
 import de.mika.resource.model.SensorData;
+import de.mika.service.LocalDateTimeService;
 import de.mika.service.StoreDataService;
 import io.quarkus.panache.common.Parameters;
 
@@ -17,6 +18,10 @@ import java.util.List;
 
 @Path("/moisture")
 public class SensorApi {
+
+    @Inject
+    LocalDateTimeService localDateTimeService;
+
     @Inject
     RawDataRepository rawDataRepository;
 
@@ -49,7 +54,7 @@ public class SensorApi {
     public List<RawData> getRawDataForLastNMinutes(@QueryParam("minutes")  int minutes){
         if (minutes==0)
             return rawDataRepository.listAll();
-        return rawDataRepository.getEntriesSince(LocalDateTime.now().minusMinutes(minutes));
+        return rawDataRepository.getEntriesSince(localDateTimeService.now().minusMinutes(minutes));
     }
 
     @POST

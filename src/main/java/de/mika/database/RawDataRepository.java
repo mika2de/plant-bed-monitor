@@ -1,7 +1,6 @@
 package de.mika.database;
 
 import de.mika.database.model.RawData;
-import de.mika.database.model.Sensor;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class RawDataRepository implements PanacheRepository<RawData> {
 
     public List<RawData> getEntriesSince(LocalDateTime timestamp) {
-        return this.find("created > :timestamp",
+        return find("created > :timestamp",
                 Parameters.with("timestamp", timestamp))
                 .list();
     }

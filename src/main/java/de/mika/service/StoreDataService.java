@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 public class StoreDataService {
 
     @Inject
+    LocalDateTimeService localDateTimeService;
+
+    @Inject
     SensorRepository sensorRepository;
 
     @Inject
@@ -25,7 +28,7 @@ public class StoreDataService {
     CurrentMoistureRepository currentMoistureRepository;
 
     public CurrentMoisture storeData(String macAddress, int moisture){
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = localDateTimeService.now();
         Sensor sensor = sensorRepository
                 .find("mac = :mac", Parameters.with("mac", macAddress))
                 .firstResult();
