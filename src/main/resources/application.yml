@@ -1,0 +1,28 @@
+quarkus:
+  datasource:
+    db-kind: postgresql
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/sensor_data
+    username: postgres
+    password: password
+  hibernate-orm:
+    database:
+      default-schema: public
+"%dev":
+  quarkus:
+    hibernate-orm:
+      log:
+        sql: true
+"%test":
+  quarkus:
+    datasource:
+      jdbc:
+        driver: org.h2.Driver
+        url: jdbc:h2:mem:default
+      username: username-default
+    hibernate-orm:
+      dialect: org.hibernate.dialect.H2Dialect
+      database:
+        generation: drop-and-create
+      log:
+        sql: true
