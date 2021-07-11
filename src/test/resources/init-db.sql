@@ -23,7 +23,7 @@ CREATE TABLE "avg_hour" (
 );
 
 CREATE TABLE "avg_day" (
-  "date" date,
+  "created" timestamp,
   "avg_moisture" int,
   "mac_id" int
 );

@@ -1,8 +1,10 @@
 package de.mika.service;
 
+import de.mika.database.DailyMoistureAvgRepository;
 import de.mika.database.HourlyMoistureAvgRepository;
 import de.mika.database.RawDataRepository;
 import de.mika.database.SensorRepository;
+import de.mika.database.model.DailyMoistureAvg;
 import de.mika.database.model.HourlyMoistureAvg;
 import de.mika.database.model.RawData;
 import io.quarkus.scheduler.Scheduled;
@@ -10,14 +12,11 @@ import io.quarkus.scheduler.Scheduled;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -27,16 +26,19 @@ public class StagingService {
     SensorRepository sensorRepository;
     RawDataRepository rawDataRepository;
     HourlyMoistureAvgRepository hourlyMoistureAvgRepository;
+    DailyMoistureAvgRepository dailyMoistureAvgRepository;
 
     @Inject
     public StagingService(LocalDateTimeService localDateTimeService,
                           SensorRepository sensorRepository,
                           RawDataRepository rawDataRepository,
-                          HourlyMoistureAvgRepository hourlyMoistureAvgRepository) {
+                          HourlyMoistureAvgRepository hourlyMoistureAvgRepository,
+                          DailyMoistureAvgRepository dailyMoistureAvgRepository) {
         this.localDateTimeService = localDateTimeService;
         this.sensorRepository = sensorRepository;
         this.rawDataRepository = rawDataRepository;
         this.hourlyMoistureAvgRepository = hourlyMoistureAvgRepository;
+        this.dailyMoistureAvgRepository = dailyMoistureAvgRepository;
     }
 
     @Scheduled(cron = "0 0 * ? * *")
@@ -45,7 +47,8 @@ public class StagingService {
         System.out.println("+++ updateAvgHour +++");
         LocalDateTime now = localDateTimeService.now();
         int hour = now.minusHours(1).getHour();
-        sensorRepository.listAll()
+        sensorRepository
+                .listAll()
                 .forEach(sensor -> {
                     List<RawData> unprocessedEntries = rawDataRepository.getEntriesOfSensorBefore(sensor.getId(), now.minusHours(1));
                     Map<LocalDateTime, List<RawData>> rawDataPerYearMonthDayHourInterval = unprocessedEntries
@@ -53,7 +56,7 @@ public class StagingService {
                             .collect(Collectors.groupingBy(
                                     rawData -> rawData.getCreated().truncatedTo(ChronoUnit.HOURS),
                                     Collectors.toCollection(ArrayList::new)
-                                    ));
+                            ));
                     for (Map.Entry<LocalDateTime, List<RawData>> entry : rawDataPerYearMonthDayHourInterval.entrySet()) {
                         int avgMoisture = entry.getValue().stream().mapToInt(RawData::getMoisture).sum() / entry.getValue().size();
                         HourlyMoistureAvg hourlyMoistureAvg = new HourlyMoistureAvg(
@@ -63,6 +66,38 @@ public class StagingService {
 
                         hourlyMoistureAvgRepository.persist(hourlyMoistureAvg);
                         entry.getValue().forEach(rawData -> rawDataRepository.delete(rawData));
+                    }
+                });
+    }
+
+    @Scheduled(cron = "0 5 1 ? * *")
+    @Transactional
+    public void updateAvgDay() {
+        System.out.println("--- updateAvgDay ---");
+        DailyMoistureAvg lastEntry = dailyMoistureAvgRepository.getLastEntry();
+        LocalDateTime lastProcessedEntryDate = lastEntry != null ? lastEntry.getCreated() : LocalDateTime.of(2000, 1, 1, 0, 0);
+        LocalDateTime lastPossibleEntryYesterday = localDateTimeService.now().truncatedTo(ChronoUnit.DAYS)
+                .minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59);
+
+        sensorRepository
+                .listAll()
+                .forEach(sensor -> {
+                    List<HourlyMoistureAvg> unprocessedEntries = hourlyMoistureAvgRepository.getEntriesFromToDate(lastProcessedEntryDate, lastPossibleEntryYesterday);
+                    Map<LocalDateTime, List<HourlyMoistureAvg>> rawDataPerYearMonthDayHourInterval = unprocessedEntries
+                            .stream()
+                            .collect(Collectors.groupingBy(
+                                    hourlyMoistureAvg -> hourlyMoistureAvg.getCreated().truncatedTo(ChronoUnit.DAYS),
+                                    Collectors.toCollection(ArrayList::new)
+                            ));
+
+                    for (Map.Entry<LocalDateTime, List<HourlyMoistureAvg>> entry : rawDataPerYearMonthDayHourInterval.entrySet()) {
+                        int avgMoisture = entry.getValue().stream().mapToInt(HourlyMoistureAvg::getAvgMoisture).sum() / entry.getValue().size();
+                        DailyMoistureAvg dailyMoistureAvg = new DailyMoistureAvg(
+                                sensor,
+                                entry.getKey(),
+                                avgMoisture);
+
+                        dailyMoistureAvgRepository.persist(dailyMoistureAvg);
                     }
                 });
     }
