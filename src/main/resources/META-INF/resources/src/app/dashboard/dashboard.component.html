@@ -7,74 +7,25 @@
 <div style="background-color: rgba(255, 255, 255, 0.7);">
   <div class="container" style="padding-top:20px">
     <div class="row">
-      <div class="col-sm-2 p-3 border bg-light">
-        <h4>Temperatur</h4>
-        <blockquote class="blockquote">
-          <p>
-            <i class="bi bi-thermometer-half"></i>14° Nord-Ost
-            <br />
-            <i class="bi bi-thermometer-half"></i>16° Süd-West
-          </p>
-
-        </blockquote>
-        <p><button type="button" class="btn btn-outline-success btn-sm">Historie</button>&nbsp;
-          <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
-            data-bs-target="#exampleModal">Prognose</button>
-        </p>
-        <br />
-        <h4>Luftfeuchtigkeit</h4>
-        <blockquote class="blockquote">
-          <p><i class="bi bi-droplet"></i>30% Nord-Ost
-            <br />
-            <i class="bi bi-droplet"></i>50% Süd-West
-          </p>
-        </blockquote>
-        <p><button type="button" class="btn btn-outline-success btn-sm">Historie</button>&nbsp;
-          <button type="button" class="btn btn-outline-success btn-sm">Prognose</button>
-        </p>
-
-      </div>
-
-      <!-- <div class="row" style="background-color: white;"> -->
-      <div class="col-sm-10  p-3" style="overflow: auto; height: 100%">
-        <h4>Bodenfeuchtigkeit</h4>
-        <!-- </div>
-    <div class="col-sm-12"> -->
+      <div class="col-sm-12  p-3" style="overflow: auto; height: 100%">
+        <h4>Aktuelle Bodenfeuchtigkeit</h4>
         <div [style.height.px]="300">
           <ngx-charts-bar-vertical [scheme]="colorScheme" [results]="moistures" [gradient]="gradient"
             [xAxis]="showXAxis" [yAxis]="showYAxis" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
             [xAxisLabel]="xAxisLabel" yAxisLabel="Prozent" [yScaleMin]="0" (select)="onSelect($event)">
           </ngx-charts-bar-vertical>
         </div>
-        <!-- </div>  -->
-        <!-- <div class="col-sm-12" style="text-align:right"> -->
-
-        <!-- </div> -->
       </div>
-      <div class="text-end"><small><i>Idealbedingungen bei 30%</i></small></div>
     </div>
-
-    <!-- <div class="row">
-
-  </div>
-  <div class="row">
-    <div class="col-sm-6" style="height: 300px; background-color: aliceblue;">
-      <ngx-charts-area-chart [scheme]="colorScheme" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
-        yAxisLabel="Luftfeuchtigkeit" [timeline]="timeline" [results]="temperatures" [gradient]="false"
-        [curve]="temperatureCurve" (select)="onSelect($event)">
-      </ngx-charts-area-chart>
-    </div>
-    <div class="col-sm-6" style="height: 300px; background-color: aliceblue;">
-      <ngx-charts-area-chart [scheme]="colorScheme" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel" [timeline]="timeline" [results]="temperatures" [gradient]="false"
-        [curve]="temperatureCurve" (select)="onSelect($event)">
-      </ngx-charts-area-chart>
-    </div>
-
-
-  </div> -->
+    <div class="row">
+      <div class="col p-3 border bg-light text-center">
+        <button type="button" class="btn btn-outline-success btn-sm">5 Tage History</button>
+      </div>
+      <div class="col p-3 border bg-light text-center">
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+          data-bs-target="#exampleModal">3 Tage Vorschau</button>
+      </div>
+      <br />
   </div>
 </div>
 
