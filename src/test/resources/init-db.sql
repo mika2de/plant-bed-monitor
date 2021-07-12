@@ -34,8 +34,8 @@ ALTER TABLE "avg_hour" ADD FOREIGN KEY ("mac_id") REFERENCES "sensor" ("id");
 ALTER TABLE "avg_day" ADD FOREIGN KEY ("mac_id") REFERENCES "sensor" ("id");
 
 CREATE INDEX ON "raw_data" ("created");
-CREATE INDEX ON "avg_hour" ("date");
-CREATE INDEX ON "avg_day" ("date");
+CREATE INDEX ON "avg_hour" ("created");
+CREATE INDEX ON "avg_day" ("created");
 
 INSERT INTO sensor (id, mac, name) VALUES
 (1, 'A0:B0:C0:D0:E0:F0', 'Tomato'),

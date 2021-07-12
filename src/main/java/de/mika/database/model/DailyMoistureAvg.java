@@ -21,5 +21,5 @@ public class DailyMoistureAvg {
     @Id
     private LocalDateTime created;
     @Column(name="avg_moisture")
-    private int moisture;
+    private int avgMoisture;
 }

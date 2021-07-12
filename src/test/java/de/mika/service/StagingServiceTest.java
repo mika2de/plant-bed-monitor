@@ -74,7 +74,6 @@ class StagingServiceTest {
         for (int r = 0; r < 10; r++) {
             RawData rawData = new RawData(mockedSensor, mockedNow.minusHours(1).plusMinutes(r * 10), r);
             mockedRawDataList.add(rawData);
-            System.out.println(rawData);
             if (rawData.getCreated().getHour() == mockedNow.minusHours(1).getHour()){
                 mockedRawDataToBeStaged.add(rawData);
             }

@@ -75,14 +75,16 @@ public class StagingService {
     public void updateAvgDay() {
         System.out.println("--- updateAvgDay ---");
         DailyMoistureAvg lastEntry = dailyMoistureAvgRepository.getLastEntry();
-        LocalDateTime lastProcessedEntryDate = lastEntry != null ? lastEntry.getCreated() : LocalDateTime.of(2000, 1, 1, 0, 0);
+        LocalDateTime lastProcessedDayEntryDate = lastEntry != null ? lastEntry.getCreated() : LocalDateTime.of(2000, 1, 1, 0, 0);
+
+        LocalDateTime nextDateToBeProcess = lastProcessedDayEntryDate.plusDays(1).truncatedTo(ChronoUnit.DAYS);
         LocalDateTime lastPossibleEntryYesterday = localDateTimeService.now().truncatedTo(ChronoUnit.DAYS)
                 .minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59);
-
         sensorRepository
                 .listAll()
                 .forEach(sensor -> {
-                    List<HourlyMoistureAvg> unprocessedEntries = hourlyMoistureAvgRepository.getEntriesFromToDate(lastProcessedEntryDate, lastPossibleEntryYesterday);
+                    List<HourlyMoistureAvg> unprocessedEntries = hourlyMoistureAvgRepository.getEntriesFromToDate(nextDateToBeProcess, lastPossibleEntryYesterday);
+                    System.out.println("++++" + unprocessedEntries.size());
                     Map<LocalDateTime, List<HourlyMoistureAvg>> rawDataPerYearMonthDayHourInterval = unprocessedEntries
                             .stream()
                             .collect(Collectors.groupingBy(
@@ -96,8 +98,7 @@ public class StagingService {
                                 sensor,
                                 entry.getKey(),
                                 avgMoisture);
-
-                        dailyMoistureAvgRepository.persist(dailyMoistureAvg);
+                       dailyMoistureAvgRepository.persist(dailyMoistureAvg);
                     }
                 });
     }

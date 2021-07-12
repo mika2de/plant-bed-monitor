@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Embeddable
@@ -15,5 +16,5 @@ public class AvgDataPointPk implements Serializable {
     @ManyToOne
     @JoinColumn(name = "mac_id")
     private Sensor sensor;
-    private Date date;
+    private LocalDateTime created;
 }
