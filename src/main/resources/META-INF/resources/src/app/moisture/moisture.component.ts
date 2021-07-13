@@ -16,6 +16,7 @@ export class MoistureComponent implements OnInit {
 
   // options
   legend: boolean = true;
+  legendPosition: string = 'right';
   showLabels: boolean = true;
   animations: boolean = true;
   xAxis: boolean = true;
