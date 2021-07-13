@@ -1,20 +1,22 @@
 package de.mika.resource;
 
-import de.mika.database.CurrentMoistureRepository;
-import de.mika.database.RawDataRepository;
-import de.mika.database.SensorRepository;
+import de.mika.database.*;
 import de.mika.database.model.*;
-import de.mika.resource.model.SensorData;
 import de.mika.service.LocalDateTimeService;
-import de.mika.service.StoreDataService;
-import io.quarkus.panache.common.Parameters;
+import de.mika.service.MoistureService;
+import io.smallrye.common.constraint.NotNull;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Path("/moisture")
 public class SensorApi {
@@ -26,13 +28,19 @@ public class SensorApi {
     RawDataRepository rawDataRepository;
 
     @Inject
-    StoreDataService storeDataService;
+    MoistureService moistureService;
 
     @Inject
     SensorRepository sensorRepository;
 
     @Inject
     CurrentMoistureRepository currentMoistureRepository;
+
+    @Inject
+    HourlyMoistureAvgRepository hourlyMoistureAvgRepository;
+
+    @Inject
+    DailyMoistureAvgRepository dailyMoistureAvgRepository;
 
     @GET
     @Path("/sensors")
@@ -41,11 +49,30 @@ public class SensorApi {
         return sensorRepository.listAll();
     }
 
+    @POST
+    @Path("/sensors/{sensorId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public Sensor renameSensor(@PathParam(value = "sensorId") int sensorId, @NotNull String name){
+        Sensor sensor = sensorRepository.findById(Long.valueOf(sensorId));
+        sensor.setName(name);
+        sensorRepository.persist(sensor);
+        return sensor;
+    }
+
+
     @GET
     @Path("/current")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CurrentMoisture> getCurrent() {
-        return currentMoistureRepository.listAll();
+    public List<MoistureApiModel> getCurrent() {
+        return currentMoistureRepository.listAll()
+                .stream()
+                .sorted(Comparator.comparingInt(m -> m.getSensor().getId().intValue()))
+                .map(currentMoisture -> new MoistureApiModel(
+                        currentMoisture.getSensor().getName(),
+                        currentMoisture.getSensor().getMac(),
+                        currentMoisture.getMoisture()))
+                .collect(toList());
     }
 
     @GET
@@ -57,14 +84,25 @@ public class SensorApi {
         return rawDataRepository.getEntriesSince(localDateTimeService.now().minusMinutes(minutes));
     }
 
+    @GET
+    @Path("/hourly")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<HourlyMoistureAvg> getHourlyAvg(){
+        LocalDateTime now = localDateTimeService.now();
+        return hourlyMoistureAvgRepository.getEntriesFromToDate(now.minusHours(24).truncatedTo(ChronoUnit.HOURS), now);
+    }
+
+    @GET
+    @Path("/daily")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DailyMoistureAvg> getDailyAvg(){
+        return dailyMoistureAvgRepository.listAll();
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public CurrentMoisture storeData(SensorData sensorData){
-        return storeDataService.storeData(sensorData.getMac(), sensorData.getMoisture());
-    }
-
-    void updateAvgHour(int moisture, Sensor sensor){
-
+    public CurrentMoisture storeData(@Valid MoistureApiModel moistureApiModel){
+        return moistureService.storeData(moistureApiModel.getMac(), moistureApiModel.getValue());
     }
 }

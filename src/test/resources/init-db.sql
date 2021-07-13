@@ -34,8 +34,8 @@ ALTER TABLE "avg_hour" ADD FOREIGN KEY ("mac_id") REFERENCES "sensor" ("id");
 ALTER TABLE "avg_day" ADD FOREIGN KEY ("mac_id") REFERENCES "sensor" ("id");
 
 CREATE INDEX ON "raw_data" ("created");
-CREATE INDEX ON "avg_hour" ("date");
-CREATE INDEX ON "avg_day" ("date");
+CREATE INDEX ON "avg_hour" ("created");
+CREATE INDEX ON "avg_day" ("created");
 
 INSERT INTO sensor (id, mac, name) VALUES
 (1, 'A0:B0:C0:D0:E0:F0', 'Tomato'),
@@ -50,16 +50,16 @@ INSERT INTO sensor (id, mac, name) VALUES
 (10, 'A9:B9:C9:D9:E9:F9', 'Rhubarb');
 
 INSERT INTO current (moisture, updated, mac_id) VALUES
-(0, '1999-01-01 12:00:00.000000', 1),
-(0, '1999-01-01 12:00:00.000000', 2),
-(0, '1999-01-01 12:00:00.000000', 3),
-(0, '1999-01-01 12:00:00.000000', 4),
-(0, '1999-01-01 12:00:00.000000', 5),
-(0, '1999-01-01 12:00:00.000000', 6),
-(0, '1999-01-01 12:00:00.000000', 7),
-(0, '1999-01-01 12:00:00.000000', 8),
-(0, '1999-01-01 12:00:00.000000', 9),
-(0, '1999-01-01 12:00:00.000000', 10);
+(10, '1999-01-01 12:00:00.000000', 1),
+(15, '1999-01-01 12:00:00.000000', 2),
+(20, '1999-01-01 12:00:00.000000', 3),
+(35, '1999-01-01 12:00:00.000000', 4),
+(40, '1999-01-01 12:00:00.000000', 5),
+(45, '1999-01-01 12:00:00.000000', 6),
+(50, '1999-01-01 12:00:00.000000', 7),
+(55, '1999-01-01 12:00:00.000000', 8),
+(60, '1999-01-01 12:00:00.000000', 9),
+(65, '1999-01-01 12:00:00.000000', 10);
 
 --Copy & paste from datapoints.sql, created by testdata-generator.py
 INSERT INTO raw_data (moisture, created, mac_id) VALUES
