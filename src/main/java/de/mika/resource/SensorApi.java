@@ -4,14 +4,19 @@ import de.mika.database.*;
 import de.mika.database.model.*;
 import de.mika.service.LocalDateTimeService;
 import de.mika.service.MoistureService;
+import io.smallrye.common.constraint.NotNull;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Path("/moisture")
 public class SensorApi {
@@ -48,7 +53,7 @@ public class SensorApi {
     @Path("/sensors/{sensorId}")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Sensor renameSensor(@PathParam(value = "sensorId") int sensorId, String name){
+    public Sensor renameSensor(@PathParam(value = "sensorId") int sensorId, @NotNull String name){
         Sensor sensor = sensorRepository.findById(Long.valueOf(sensorId));
         sensor.setName(name);
         sensorRepository.persist(sensor);
@@ -59,8 +64,15 @@ public class SensorApi {
     @GET
     @Path("/current")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CurrentMoisture> getCurrent() {
-        return currentMoistureRepository.listAll();
+    public List<MoistureApiModel> getCurrent() {
+        return currentMoistureRepository.listAll()
+                .stream()
+                .sorted(Comparator.comparingInt(m -> m.getSensor().getId().intValue()))
+                .map(currentMoisture -> new MoistureApiModel(
+                        currentMoisture.getSensor().getName(),
+                        currentMoisture.getSensor().getMac(),
+                        currentMoisture.getMoisture()))
+                .collect(toList());
     }
 
     @GET
@@ -90,7 +102,7 @@ public class SensorApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public CurrentMoisture storeData(MoistureApiModel moistureApiModel){
-        return moistureService.storeData(moistureApiModel.getMac(), moistureApiModel.getMoisture());
+    public CurrentMoisture storeData(@Valid MoistureApiModel moistureApiModel){
+        return moistureService.storeData(moistureApiModel.getMac(), moistureApiModel.getValue());
     }
 }

@@ -8,6 +8,8 @@ quarkus:
   hibernate-orm:
     database:
       default-schema: public
+  http:
+    cors: true
 "%dev":
   quarkus:
     hibernate-orm:
