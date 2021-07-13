@@ -1,20 +1,36 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
-import { Multi } from './multi';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+
 import { Single } from './single';
-import { CURRENT_MOISTURES } from './mock-current-moisture';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   getCurrentMoisture(): Observable<Single[]> {
-    const moistures = of(CURRENT_MOISTURES);
+    const moistures =  this.http.get<Single[]>('http://localhost:8080/moisture/current')
+    .pipe(
+      tap(_ => this.log('fetched current moisture')),
+      catchError(this.handleError<Single[]>('getCurrentMoisture', []))
+    );
     return moistures;
   }
+  
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      this.log(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
+  }
 
+  private log(message: string) {
+    console.log(`DashboardService: ${message}`)
+  }
 }
