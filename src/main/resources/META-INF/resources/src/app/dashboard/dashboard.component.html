@@ -7,7 +7,7 @@
 <div style="background-color: rgba(255, 255, 255, 0.7);">
   <div class="container" style="padding-top:20px">
     <div class="row">
-      <div class="col-sm-12  p-3" style="overflow: auto; height: 100%">
+      <div class="col-sm-12" style="overflow: auto; height: 100%">
         <h4>Aktuelle Bodenfeuchtigkeit</h4>
         <div [style.height.px]="300">
           <ngx-charts-bar-vertical [scheme]="colorScheme" [results]="moistures" [gradient]="gradient"
@@ -17,41 +17,41 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row p-3">
       <div class="col p-3 border bg-light text-center">
-        <button type="button" class="btn btn-success btn-sm"><span class="bi bi-clipboard-data">&nbsp;&nbsp;5 Tage History</span></button>
+        <a class="btn btn-success btn-sm" href="/moisture"><span class="bi bi-stack">&nbsp;&nbsp;24h Sensordaten</span></a>
       </div>
       <div class="col p-3 border bg-light text-center">
-        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-          data-bs-target="#exampleModal"><span class="bi bi-calendar4-week">&nbsp;&nbsp;Wettervorhersage</span></button>
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><span
+            class="bi bi-cloud-sun-fill">&nbsp;&nbsp;Wettervorhersage</span></button>
       </div>
       <div class="col p-3 border bg-light text-center">
-        <button type="button" class="btn btn-outline-success btn-sm"><span class="bi bi-gear">&nbsp;&nbsp;Einstellungen</span></button>
+        <button type="button" class="btn btn-outline-success btn-sm"><span
+            class="bi bi-gear-fill">&nbsp;&nbsp;Einstellungen</span></button>
       </div>
-      <br />
+    </div>
   </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-house"></i> Finkenweg </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <iframe
-          src="https://www.meteoblue.com/de/wetter/widget/three/ro%c3%9fdorf_deutschland_2844756?geoloc=fixed&nocurrent=0&nocurrent=1&noforecast=0&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=bright"
-          frameborder="0" scrolling="NO" allowtransparency="true"
-          sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
-          style="width: 460px; height: 487px"></iframe>
-        <div>
-          <!-- DO NOT REMOVE THIS LINK -->Unterstützt von <a
-            href="https://www.meteoblue.com/de/wetter/woche/ro%c3%9fdorf_deutschland_2844756?utm_source=weather_widget&utm_medium=linkus&utm_content=three&utm_campaign=Weather%2BWidget"
-            target="_blank">meteoblue</a>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-house"></i> Finkenweg </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <iframe
+            src="https://www.meteoblue.com/de/wetter/widget/three/ro%c3%9fdorf_deutschland_2844756?geoloc=fixed&nocurrent=0&nocurrent=1&noforecast=0&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=bright"
+            frameborder="0" scrolling="NO" allowtransparency="true"
+            sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
+            style="width: 460px; height: 487px"></iframe>
+          <div>
+            <!-- DO NOT REMOVE THIS LINK -->Unterstützt von <a
+              href="https://www.meteoblue.com/de/wetter/woche/ro%c3%9fdorf_deutschland_2844756?utm_source=weather_widget&utm_medium=linkus&utm_content=three&utm_campaign=Weather%2BWidget"
+              target="_blank">meteoblue</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>

@@ -1,25 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
 import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 import { Multi } from './multi';
-import { Single } from './single';
-import { MOISTURES_24h as MOISTURES_LEFT } from './mock-24h-moistures-left';
-import { MOISTURES_24h as MOISTURES_RIGHT } from './mock-24h-moistures-right';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MoistureService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  getMoisturesRight(): Observable<Multi[]> {
-    const moistures = of(MOISTURES_RIGHT);
+  getMoistures(): Observable<Multi[]> {
+    const moistures =  this.http.get<Multi[]>('http://localhost:8080/moisture/24h')
+    .pipe(
+      tap(_ => this.log('fetched current moisture')),
+      catchError(this.handleError<Multi[]>('getCurrentMoisture', []))
+    );
     return moistures;
   }
 
-  getMoisturesLeft(): Observable<Multi[]> {
-    const moistures = of(MOISTURES_LEFT);
-    return moistures;
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      this.log(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
+  }
+
+  private log(message: string) {
+    console.log(`DashboardService: ${message}`)
   }
 }

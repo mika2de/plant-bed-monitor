@@ -46,11 +46,11 @@ export class HumidityComponent implements OnInit {
   }
 
   getHumiditiesLeft(): void {
-    this.humidityService.getMoisturesLeft().subscribe(entries => this.humiditiesLeft = entries) 
+    this.humidityService.getMoistures().subscribe(entries => this.humiditiesLeft = entries) 
   }
 
   getHumiditiesRight(): void {
-    this.humidityService.getMoisturesRight().subscribe(entries => this.humiditiesRight = entries) 
+    this.humidityService.getMoistures().subscribe(entries => this.humiditiesRight = entries) 
   }
 
   onSelect(data): void {

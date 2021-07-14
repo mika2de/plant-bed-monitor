@@ -6,10 +6,11 @@
 </div>
 <div style="background-color: rgba(255, 255, 255, 0.7);">
   <div class="container" style="padding-top:20px">
-    <div class="row">
-      <div class="col">
+    <div class="row" #ContainerRef>
+      <div class="col-sm-12">
+        <h4>24h Rückblick</h4>
         <ngx-charts-line-chart
-        [view]="view"
+        [view]="[ContainerRef.offsetWidth-15, 400]"
         [scheme]="colorScheme"
         [legend]="legend"
         [legendPosition]="legendPosition"
@@ -29,27 +30,19 @@
         [showRefLabels]="showRefLabels"[timeline]="true"
         >
       </ngx-charts-line-chart>
-      <!-- <ngx-charts-line-chart
-        [view]="view"
-        [scheme]="colorScheme"
-        [legend]="legend"
-        [legendPosition]="legendPosition"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxis]="xAxis"
-        [yAxis]="yAxis"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [timeline]="timeline"
-        [results]="moisturesRight"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-        [referenceLines]="referenceLines"
-        [showRefLines]="showRefLines"  
-        [showRefLabels]="showRefLabels"[timeline]="true"
-        >
-      </ngx-charts-line-chart> -->
+      </div>
+    </div>
+    <div class="row p-3">
+      <div class="col p-3 border bg-light text-center">
+        <a class="btn btn-success btn-sm" href="/dashboard"><span class="bi bi-bar-chart-fill">&nbsp;&nbsp;Übersicht</span></a>
+      </div>
+      <div class="col p-3 border bg-light text-center">
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><span
+            class="bi bi-cloud-sun-fill">&nbsp;&nbsp;Wettervorhersage</span></button>
+      </div>
+      <div class="col p-3 border bg-light text-center">
+        <button type="button" class="btn btn-outline-success btn-sm"><span
+            class="bi bi-gear-fill">&nbsp;&nbsp;Einstellungen</span></button>
       </div>
     </div>
   </div>

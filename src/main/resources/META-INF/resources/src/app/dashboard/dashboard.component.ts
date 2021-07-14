@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as shape from 'd3-shape';
 
-import { Multi } from "./../multi"
 import { Single } from "./../single"
 import { DashboardService } from '../dashboard.service';
 

@@ -12,26 +12,26 @@ export class MoistureComponent implements OnInit {
 
   moisturesRight: Multi[] = [];
   moisturesLeft: Multi[] = [];
-  view: any[] = [700, 300];
+  view: any[] = [700, 400];
 
   // options
   legend: boolean = true;
-  legendPosition: string = 'right';
+  legendPosition: string = 'below';
   showLabels: boolean = true;
   animations: boolean = true;
   xAxis: boolean = true;
   yAxis: boolean = true;
-  showYAxisLabel: boolean = true;
-  showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Year';
-  yAxisLabel: string = 'Population';
+  showYAxisLabel: boolean = false;
+  showXAxisLabel: boolean = false;
+  xAxisLabel: string = 'Stunde';
+  yAxisLabel: string = 'Bodenfeuchtigkeit';
   timeline: boolean = true;
   showRefLines: boolean = true;
   showRefLabels: boolean = true;
   referenceLines = [
-    { value: 15, name: 'Max' },
-    { value: -13, name: 'Min' },
-    { value: 2, name: 'Ideal' }
+    { value: 50, name: 'Max' },
+    { value: 40, name: 'Min' },
+    { value: 45, name: 'Ideal' }
   ];
 
   colorScheme = {
@@ -42,16 +42,11 @@ export class MoistureComponent implements OnInit {
   constructor(private moistureService: MoistureService) {}
 
   ngOnInit(): void {
-    this.getMoisturesLeft();
-    this.getMoisturesRight();
+    this.getMoistures();
   }
 
-  getMoisturesLeft(): void {
-    this.moistureService.getMoisturesLeft().subscribe(entries => this.moisturesLeft = entries) 
-  }
-
-  getMoisturesRight(): void {
-    this.moistureService.getMoisturesRight().subscribe(entries => this.moisturesRight = entries) 
+  getMoistures(): void {
+    this.moistureService.getMoistures().subscribe(entries => this.moisturesLeft = entries) 
   }
 
   onSelect(data): void {
