@@ -2,6 +2,9 @@ package de.mika.resource;
 
 import de.mika.database.*;
 import de.mika.database.model.*;
+import de.mika.resource.model.DataPoint;
+import de.mika.resource.model.MultiChart;
+import de.mika.resource.model.SingleChart;
 import de.mika.service.LocalDateTimeService;
 import de.mika.service.MoistureService;
 import io.smallrye.common.constraint.NotNull;
@@ -12,9 +15,10 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -64,13 +68,12 @@ public class SensorApi {
     @GET
     @Path("/current")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<MoistureApiModel> getCurrent() {
+    public List<SingleChart> getCurrent() {
         return currentMoistureRepository.listAll()
                 .stream()
                 .sorted(Comparator.comparingInt(m -> m.getSensor().getId().intValue()))
-                .map(currentMoisture -> new MoistureApiModel(
+                .map(currentMoisture -> new SingleChart(
                         currentMoisture.getSensor().getName(),
-                        currentMoisture.getSensor().getMac(),
                         currentMoisture.getMoisture()))
                 .collect(toList());
     }
@@ -85,11 +88,30 @@ public class SensorApi {
     }
 
     @GET
-    @Path("/hourly")
+    @Path("/24h")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<HourlyMoistureAvg> getHourlyAvg(){
+    public List<MultiChart> getPastHourAvgMoistures(){
         LocalDateTime now = localDateTimeService.now();
-        return hourlyMoistureAvgRepository.getEntriesFromToDate(now.minusHours(24).truncatedTo(ChronoUnit.HOURS), now);
+        List<MultiChart> multiCharts = new ArrayList<>();
+        hourlyMoistureAvgRepository.getEntriesFromToDate(now.minusHours(24).truncatedTo(ChronoUnit.HOURS), now)
+                .stream()
+                .sorted(Comparator.comparingLong(m -> m.getCreated().toEpochSecond(ZoneOffset.UTC)))
+                .forEach(hourlyMoistureAvg -> {
+                    MultiChart multiChart = multiCharts
+                            .stream()
+                            .filter(m -> m.getName() == hourlyMoistureAvg.getSensor().getName())
+                            .findFirst()
+                            .orElse(new MultiChart(hourlyMoistureAvg.getSensor().getName(), new ArrayList<>()));
+                    multiChart.getSeries().add(new SingleChart(
+                            String.valueOf(hourlyMoistureAvg.getCreated().getHour()),
+                            hourlyMoistureAvg.getAvgMoisture()));
+                    multiCharts.add(multiChart);
+                });
+        return multiCharts;
+//                .sorted(Comparator.comparingInt(m -> m.getSensor().getId().intValue()))
+//                .
+//                .map(hourlyMoistureAvg -> )
+//                .collect(Collectors.groupingBy(o -> ));
     }
 
     @GET
@@ -102,7 +124,7 @@ public class SensorApi {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public CurrentMoisture storeData(@Valid MoistureApiModel moistureApiModel){
-        return moistureService.storeData(moistureApiModel.getMac(), moistureApiModel.getValue());
+    public CurrentMoisture storeData(@Valid DataPoint dataPoint){
+        return moistureService.storeData(dataPoint.getMac(), dataPoint.getValue());
     }
 }

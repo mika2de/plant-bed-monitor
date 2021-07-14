@@ -1,4 +1,4 @@
-package de.mika.resource;
+package de.mika.resource.model;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Data
-public class MoistureApiModel {
+public class DataPoint {
 
-    private String name;
     @NotNull
     private String mac;
     @NotNull
