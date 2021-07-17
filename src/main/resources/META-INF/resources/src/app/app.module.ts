@@ -7,11 +7,11 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { AppComponent } from './app.component';
 import { MoistureComponent } from './moisture/moisture.component';
-import { TemperatureComponent } from './temperature/temperature.component';
-import { HumidityComponent } from './humidity/humidity.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SensorComponent } from './sensor/sensor.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 
@@ -19,10 +19,10 @@ import { SensorComponent } from './sensor/sensor.component';
   declarations: [
     AppComponent,
     MoistureComponent,
-    TemperatureComponent,
-    HumidityComponent,
     DashboardComponent,
-    SensorComponent
+    SensorComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule, 

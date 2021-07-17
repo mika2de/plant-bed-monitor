@@ -1,44 +1,27 @@
-<div class="container" style="padding-top:20px">
-  <div class="row">
-    <h1 class="display-6" style="color: white;"><strong> Smart Garden Monitor <i class="bi bi-cloud-sun"></i></strong>
-    </h1>
-  </div>
-</div>
+<app-header></app-header>
+
 <div style="background-color: rgba(255, 255, 255, 0.7);">
   <div class="container" style="padding-top:20px">
     <div class="row" #ContainerRef>
       <div class="col-sm-12">
         <h4>24h Rückblick</h4>
-        <ngx-charts-line-chart
-        [view]="[ContainerRef.offsetWidth-15, 400]"
-        [scheme]="colorScheme"
-        [legend]="legend"
-        [legendPosition]="legendPosition"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxis]="xAxis"
-        [yAxis]="yAxis"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [timeline]="timeline"
-        [results]="moisturesLeft"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-        [referenceLines]="referenceLines"
-        [showRefLines]="showRefLines"  
-        [showRefLabels]="showRefLabels"[timeline]="true"
-        >
-      </ngx-charts-line-chart>
+        <ngx-charts-line-chart [view]="[ContainerRef.offsetWidth-15, 400]" [scheme]="colorScheme" [legend]="legend"
+          [legendPosition]="legendPosition" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+          [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [timeline]="timeline"
+          [results]="moisturesLeft" (select)="onSelect($event)" (activate)="onActivate($event)"
+          (deactivate)="onDeactivate($event)" [referenceLines]="referenceLines" [showRefLines]="showRefLines"
+          [showRefLabels]="showRefLabels" [timeline]="true">
+        </ngx-charts-line-chart>
       </div>
     </div>
     <div class="row p-top-down-1rem">
       <div class="col p-3 border bg-light text-center">
-        <a class="btn btn-success btn-sm" href="/dashboard"><span class="bi bi-bar-chart-fill">&nbsp;&nbsp;Übersicht</span></a>
+        <a class="btn btn-success btn-sm" href="/dashboard"><span
+            class="bi bi-bar-chart-fill">&nbsp;&nbsp;Übersicht</span></a>
       </div>
       <div class="col p-3 border bg-light text-center">
-        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><span
-            class="bi bi-cloud-sun-fill">&nbsp;&nbsp;Wettervorhersage</span></button>
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+          data-bs-target="#exampleModal"><span class="bi bi-cloud-sun-fill">&nbsp;&nbsp;Wettervorhersage</span></button>
       </div>
       <div class="col p-3 border bg-light text-center">
         <a class="btn btn-success btn-sm" href="/sensor"><span
@@ -47,3 +30,5 @@
     </div>
   </div>
 </div>
+
+<app-footer></app-footer>
