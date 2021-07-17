@@ -1,0 +1,47 @@
+<div class="container" style="padding-top:20px">
+  <div class="row">
+    <h1 class="display-6" style="color: white;"><strong> Smart Garden Monitor <i class="bi bi-cloud-sun"></i></strong>
+    </h1>
+  </div>
+</div>
+<div style="background-color: rgba(255, 255, 255, 0.7);">
+  <div class="container" style="padding-top:20px">
+    <div class="row">
+      <div class="col-sm-12">
+        <h4>Sensoren</h4>
+      </div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-4">
+        <form  *ngFor="let sensor of modelSensors" (ngSubmit)="onSubmit()" #sensorForm="ngForm">
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="sensorGroup">{{sensor.id}}</span>
+            <input type="hidden" class="form-control" [(ngModel)]="sensor.id" name="id"
+              #id="ngModel" required>
+            <input type="text" class="form-control" aria-label="sensorName"
+              aria-describedby="sensorGroup" [(ngModel)]="sensor.name" name="name"
+              #name="ngModel" required>
+            <button type="submit"  class="btn btn-success" id="sensorGroup" [disabled]="!sensorForm.form.valid"><i class="bi bi-check"></i></button>
+          </div>
+        </form>
+        
+      </div>
+    </div>
+    <div class="row p-top-down-1rem">
+      <div class="col p-3 border bg-light text-center">
+        <a class="btn btn-success btn-sm" href="/dashboard"><span
+            class="bi bi-bar-chart-fill">&nbsp;&nbsp;Übersicht</span></a>
+      </div>
+      <div class="col p-3 border bg-light text-center">
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+          data-bs-target="#exampleModal"><span class="bi bi-cloud-sun-fill">&nbsp;&nbsp;Wettervorhersage</span></button>
+      </div>
+      <div class="col p-3 border bg-light text-center">
+        <a class="btn btn-success btn-sm" href="/sensor"><span
+            class="bi bi-gear-fill">&nbsp;&nbsp;Einstellungen</span></a>
+      </div>
+    </div>
+
+
+  </div>
+</div>

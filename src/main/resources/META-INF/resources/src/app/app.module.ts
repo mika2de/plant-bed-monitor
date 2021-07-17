@@ -11,6 +11,7 @@ import { TemperatureComponent } from './temperature/temperature.component';
 import { HumidityComponent } from './humidity/humidity.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { SensorComponent } from './sensor/sensor.component';
 
 
 
@@ -20,7 +21,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MoistureComponent,
     TemperatureComponent,
     HumidityComponent,
-    DashboardComponent
+    DashboardComponent,
+    SensorComponent
   ],
   imports: [
     BrowserModule, 

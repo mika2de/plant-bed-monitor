@@ -7,3 +7,8 @@ body {
     -o-background-size: cover;
     background-size: cover;
 }
+
+.p-top-down-1rem {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
