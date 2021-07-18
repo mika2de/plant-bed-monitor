@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { Sensor } from './sensor';
+import { SrvUrl } from './SrvUrl'
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class SensorService {
   constructor(private http: HttpClient) { }
 
   getSensors(): Observable<Sensor[]> {
-    const moistures =  this.http.get<Sensor[]>('http://localhost:8080/sensors')
+    const moistures =  this.http.get<Sensor[]>(`${new SrvUrl().getUrl()}/sensors`)
     .pipe(
       tap(_ => this.log('fetched sensors')),
       catchError(this.handleError<Sensor[]>('getSensors', []))
@@ -24,7 +25,7 @@ export class SensorService {
 
   updateSensors(sensorList) {
     console.log('save me')
-    const sensors = this.http.post<Sensor[]>('http://localhost:8080/sensors', sensorList)
+    const sensors = this.http.post<Sensor[]>(`${new SrvUrl().getUrl()}/sensors`, sensorList)
     .pipe(
       tap(_ => this.log('updated')),
       catchError(this.handleError<Sensor[]>('updateSensors', []))

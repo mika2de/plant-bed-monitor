@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { Multi } from './multi';
+import { SrvUrl } from './SrvUrl'
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class MoistureService {
   constructor(private http: HttpClient) { }
 
   getMoistures(): Observable<Multi[]> {
-    const moistures =  this.http.get<Multi[]>('http://localhost:8080/moisture/24h')
+    const moistures =  this.http.get<Multi[]>(`${new SrvUrl().getUrl()}/moisture/24h`)
     .pipe(
       tap(_ => this.log('fetched current moisture')),
       catchError(this.handleError<Multi[]>('getCurrentMoisture', []))

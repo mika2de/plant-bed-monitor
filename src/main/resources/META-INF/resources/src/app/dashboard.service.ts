@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { Single } from './single';
+import { SrvUrl } from './SrvUrl'
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class DashboardService {
   constructor(private http: HttpClient) { }
 
   getCurrentMoisture(): Observable<Single[]> {
-    const moistures =  this.http.get<Single[]>('http://localhost:8080/moisture/current')
+    const moistures =  this.http.get<Single[]>(`${new SrvUrl().getUrl()}/moisture/current`)
     .pipe(
       tap(_ => this.log('fetched current moisture')),
       catchError(this.handleError<Single[]>('getCurrentMoisture', []))
