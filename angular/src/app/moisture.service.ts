@@ -7,6 +7,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { environment } from './environments/environment';
 
 import { Multi } from './multi';
+import { SrvUrl } from './SrvUrl'
 
 @Injectable({
   providedIn: 'root'

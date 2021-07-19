@@ -7,6 +7,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { environment } from './environments/environment';
 
 import { Sensor } from './sensor';
+import { SrvUrl } from './SrvUrl'
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class SensorService {
     )
     .subscribe(sensors => {
       console.log("updated sensors: " + sensors)
-    }) 
+    })
 
   }
 
