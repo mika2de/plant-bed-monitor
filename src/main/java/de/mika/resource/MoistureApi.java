@@ -27,6 +27,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Path("/moisture")
 public class MoistureApi {
 
     @Inject
