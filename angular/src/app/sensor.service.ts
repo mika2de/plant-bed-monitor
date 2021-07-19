@@ -4,10 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-import { environment } from './environments/environment';
+import { environment } from '../environments/environment';
 
 import { Sensor } from './sensor';
-import { SrvUrl } from './SrvUrl'
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,7 @@ export class SensorService {
   constructor(private http: HttpClient) { }
 
   getSensors(): Observable<Sensor[]> {
-    const moistures =  this.http.get<Sensor[]>(`${environment.API_URL}/sensors`)
+    const moistures =  this.http.get<Sensor[]>(`${environment.apiPath}/sensors`)
     .pipe(
       tap(_ => this.log('fetched sensors')),
       catchError(this.handleError<Sensor[]>('getSensors', []))
@@ -27,7 +26,7 @@ export class SensorService {
 
   updateSensors(sensorList) {
     console.log('save me')
-    const sensors = this.http.post<Sensor[]>(`${environment.API_URL}/sensors`, sensorList)
+    const sensors = this.http.post<Sensor[]>(`${environment.apiPath}/sensors`, sensorList)
     .pipe(
       tap(_ => this.log('updated')),
       catchError(this.handleError<Sensor[]>('updateSensors', []))
