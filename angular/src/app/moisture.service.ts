@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
+import { environment } from './environments/environment';
+
 import { Multi } from './multi';
 
 @Injectable({
@@ -14,7 +16,7 @@ export class MoistureService {
   constructor(private http: HttpClient) { }
 
   getMoistures(): Observable<Multi[]> {
-    const moistures =  this.http.get<Multi[]>('http://localhost:8080/moisture/24h')
+    const moistures =  this.http.get<Multi[]>(`${environment.API_URL}/moisture/24h`)
     .pipe(
       tap(_ => this.log('fetched current moisture')),
       catchError(this.handleError<Multi[]>('getCurrentMoisture', []))

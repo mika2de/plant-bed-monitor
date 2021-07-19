@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
+import { environment } from './environments/environment';
+
 import { Single } from './single';
 
 @Injectable({
@@ -14,7 +16,7 @@ export class DashboardService {
   constructor(private http: HttpClient) { }
 
   getCurrentMoisture(): Observable<Single[]> {
-    const moistures =  this.http.get<Single[]>('http://localhost:8080/moisture/current')
+    const moistures =  this.http.get<Single[]>(`${environment.API_URL}/moisture/current`)
     .pipe(
       tap(_ => this.log('fetched current moisture')),
       catchError(this.handleError<Single[]>('getCurrentMoisture', []))
