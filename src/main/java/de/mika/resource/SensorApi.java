@@ -8,6 +8,7 @@ import de.mika.resource.model.SingleChart;
 import de.mika.service.LocalDateTimeService;
 import de.mika.service.MoistureService;
 import io.smallrye.common.constraint.NotNull;
+import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -24,6 +25,7 @@ import static java.util.stream.Collectors.toList;
 
 @Path("/sensors")
 public class SensorApi {
+    Logger logger = Logger.getLogger(SensorApi.class);
 
     @Inject
     SensorRepository sensorRepository;
@@ -41,6 +43,7 @@ public class SensorApi {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public List<Sensor> storeSensors(List<Sensor> sensorList) {
+        logger.infof("POST sensors %s", sensorList.size());
         List<Sensor> updatedSensorList = new ArrayList<>();
         List<Sensor> databaseSensorList = sensorRepository.listAll().
                 stream()
@@ -51,19 +54,19 @@ public class SensorApi {
             updatedSensor.setName(sensor.getName());
             sensorRepository.persist(updatedSensor);
             updatedSensorList.add(updatedSensor);
+            logger.infof("updated sensor %s, new name = %s", updatedSensor.getId(), updatedSensor.getName());
         });
         return updatedSensorList;
     }
 
-    @POST
-    @Path("/{sensorId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Sensor renameSensor(@PathParam(value = "sensorId") int sensorId, @NotNull String name){
-        Sensor sensor = sensorRepository.findById(Long.valueOf(sensorId));
-        sensor.setName(name);
-        sensorRepository.persist(sensor);
-        return sensor;
-    }
-
+//    @POST
+//    @Path("/{sensorId}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Transactional
+//    public Sensor renameSensor(@PathParam(value = "sensorId") int sensorId, @NotNull String name){
+//        Sensor sensor = sensorRepository.findById(Long.valueOf(sensorId));
+//        sensor.setName(name);
+//        sensorRepository.persist(sensor);
+//        return sensor;
+//    }
 }
