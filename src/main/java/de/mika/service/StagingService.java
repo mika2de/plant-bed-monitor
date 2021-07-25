@@ -8,6 +8,7 @@ import de.mika.database.model.DailyMoistureAvg;
 import de.mika.database.model.HourlyMoistureAvg;
 import de.mika.database.model.RawData;
 import io.quarkus.scheduler.Scheduled;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class StagingService {
+
+    Logger logger = Logger.getLogger(StagingService.class);
 
     LocalDateTimeService localDateTimeService;
     SensorRepository sensorRepository;
@@ -44,13 +47,12 @@ public class StagingService {
     @Scheduled(cron = "0 0 * ? * *")
     @Transactional
     public void updateAvgHour() {
-        System.out.println("+++ updateAvgHour +++");
+        logger.info("start updateAvgHour");
         LocalDateTime now = localDateTimeService.now();
-        int hour = now.minusHours(1).getHour();
         sensorRepository
                 .listAll()
                 .forEach(sensor -> {
-                    List<RawData> unprocessedEntries = rawDataRepository.getEntriesOfSensorBefore(sensor.getId(), now.minusHours(1));
+                    List<RawData> unprocessedEntries = rawDataRepository.getBySensorIdBeforeTs(sensor.getId(), now.truncatedTo(ChronoUnit.HOURS));
                     Map<LocalDateTime, List<RawData>> rawDataPerYearMonthDayHourInterval = unprocessedEntries
                             .stream()
                             .collect(Collectors.groupingBy(

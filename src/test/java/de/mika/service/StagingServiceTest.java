@@ -86,7 +86,7 @@ class StagingServiceTest {
                         .mapToInt(RawData::getMoisture).sum() / mockedRawDataToBeStaged.size())
         );
 
-        when(rawDataRepository.getEntriesOfSensorBefore(anyLong(), any(LocalDateTime.class))).thenReturn(mockedRawDataList);
+        when(rawDataRepository.getBySensorIdBeforeTs(anyLong(), any(LocalDateTime.class))).thenReturn(mockedRawDataList);
 
         stagingService.updateAvgHour();
 
