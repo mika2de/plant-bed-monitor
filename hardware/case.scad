@@ -38,5 +38,49 @@ module top() {
     
 }
 
-top();
-// bottom();
+module box() {
+    // battery box
+    difference() {
+        translate([5,0,0]) difference() {
+            cube([5, 3.4, 4]);
+            translate([0.2,0.2,0.04]) cube([4.6, 3, 4]);
+        }
+        translate([1.4,0.2,1.04]) cube([6, 3, 4]); 
+    }
+    difference() {
+        // sensor mount
+        union() {
+            difference() {
+                translate([0,0,1]) cube([5, 3.4, 2]); 
+                translate([1.6,0.2,1.04]) cube([5, 3, 4]);
+                translate([-0.2,0.6,2.7]) cube([5, 2.2, 1.6]);
+            }
+            translate([0.5,0.6,2.7]) cylinder(0.3,r=0.18,false,$fn=6);
+            translate([0.5,2.8,2.7]) cylinder(0.3,r=0.18,false,$fn=6);
+        
+        }
+        // usb hole
+        translate([-1,0.9,1.34]) cube([5, 1.6, 1]);
+        translate([0.2,0.7,1.34]) cube([5, 2, 1]);
+    }
+    
+    difference() {
+        translate([1.7,0,3]) cube([4, 3.4, 1]); 
+        translate([1.4,0.2,2.8]) cube([6, 3, 2]); 
+    }
+}
+
+box();
+translate([0.5,0,2.65]) difference() {
+    cylinder(0.7,0.5,0.5, true, $fn=6);
+    translate([0,-0.15,0]) cylinder(4,0.15,0.15, true, $fn=30);
+}
+translate([0.5,3.4,2.65]) difference() {
+    cylinder(0.7,0.5,0.5, true, $fn=6);
+    translate([0,0.15,0]) cylinder(4,0.15,0.15, true, $fn=30);
+}
+translate([10,1.7,3.65]) difference() {
+    cylinder(0.7,0.5,0.5, true, $fn=6);
+    translate([0.15,0,0]) cylinder(4,0.15,0.15, true, $fn=30);
+     translate([-1,-0.5,-0.5]) cube(1,2,5);
+}
