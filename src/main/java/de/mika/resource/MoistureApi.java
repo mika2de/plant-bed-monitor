@@ -22,9 +22,7 @@ import javax.ws.rs.core.MediaType;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -80,22 +78,21 @@ public class MoistureApi {
     public List<MultiChart> getPastHourAvgMoistures(){
         logger.info("get 24h moisture");
         LocalDateTime now = localDateTimeService.now();
-        List<MultiChart> multiCharts = new ArrayList<>();
+        Map<Long, MultiChart> multiCharts = new HashMap<>();
         hourlyMoistureAvgRepository.getEntriesFromToDate(now.minusHours(24).truncatedTo(ChronoUnit.HOURS), now)
                 .stream()
                 .sorted(Comparator.comparingLong(m -> m.getCreated().toEpochSecond(ZoneOffset.UTC)))
                 .forEach(hourlyMoistureAvg -> {
-                    MultiChart multiChart = multiCharts
-                            .stream()
-                            .filter(m -> m.getName() == hourlyMoistureAvg.getSensor().getName())
-                            .findFirst()
-                            .orElse(new MultiChart(hourlyMoistureAvg.getSensor().getName(), new ArrayList<>()));
+                    MultiChart multiChart = multiCharts.get(hourlyMoistureAvg.getSensor().getId());
+                    if (multiChart == null)
+                        multiChart = new MultiChart(hourlyMoistureAvg.getSensor().getName(), new ArrayList<>());
                     multiChart.getSeries().add(new SingleChart(
                             String.valueOf(hourlyMoistureAvg.getCreated().getHour()),
                             hourlyMoistureAvg.getAvgMoisture()));
-                    multiCharts.add(multiChart);
+                    multiCharts.put(hourlyMoistureAvg.getSensor().getId(), multiChart);
                 });
-        return multiCharts;
+
+        return new ArrayList<>(multiCharts.values());
     }
 
     @GET

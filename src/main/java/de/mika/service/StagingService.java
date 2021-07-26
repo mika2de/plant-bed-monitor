@@ -75,7 +75,7 @@ public class StagingService {
     @Scheduled(cron = "0 5 1 ? * *")
     @Transactional
     public void updateAvgDay() {
-        System.out.println("--- updateAvgDay ---");
+        logger.info("--- updateAvgDay ---");
         DailyMoistureAvg lastEntry = dailyMoistureAvgRepository.getLastEntry();
         LocalDateTime lastProcessedDayEntryDate = lastEntry != null ? lastEntry.getCreated() : LocalDateTime.of(2000, 1, 1, 0, 0);
 
@@ -86,7 +86,7 @@ public class StagingService {
                 .listAll()
                 .forEach(sensor -> {
                     List<HourlyMoistureAvg> unprocessedEntries = hourlyMoistureAvgRepository.getEntriesFromToDate(nextDateToBeProcess, lastPossibleEntryYesterday);
-                    System.out.println("++++" + unprocessedEntries.size());
+                    logger.info("++++" + unprocessedEntries.size());
                     Map<LocalDateTime, List<HourlyMoistureAvg>> rawDataPerYearMonthDayHourInterval = unprocessedEntries
                             .stream()
                             .collect(Collectors.groupingBy(

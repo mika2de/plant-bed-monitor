@@ -1,5 +1,6 @@
 package de.mika.resource;
 
+import io.quarkus.test.Mock;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 

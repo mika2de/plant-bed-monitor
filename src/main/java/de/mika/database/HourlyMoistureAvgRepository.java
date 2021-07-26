@@ -19,8 +19,6 @@ public class HourlyMoistureAvgRepository implements PanacheRepository<HourlyMois
     }
 
     public List<HourlyMoistureAvg> getEntriesFromToDate(LocalDateTime fromDate, LocalDateTime toDate){
-        System.out.println(fromDate);
-        System.out.println(toDate);
         return find("created >= :lowerBound and created <= :upperBound",
                 Parameters.with("lowerBound", fromDate).and("upperBound", toDate))
                 .list();
