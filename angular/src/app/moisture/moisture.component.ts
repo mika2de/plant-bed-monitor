@@ -29,8 +29,8 @@ export class MoistureComponent implements OnInit {
   showRefLines: boolean = true;
   showRefLabels: boolean = true;
   referenceLines = [
-    { value: 50, name: 'Max' },
-    { value: 40, name: 'Min' },
+    { value: 60, name: 'Max' },
+    { value: 30, name: 'Min' },
     { value: 45, name: 'Ideal' }
   ];
 
